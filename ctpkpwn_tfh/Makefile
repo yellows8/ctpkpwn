@@ -20,6 +20,14 @@ ROPINC_PATH	:=	ropinclude
 
 export BOSSTOOLPARAMS	:=	$(BOSSTOOLPARAMS)
 
+DEFINES	:=	-DTARGET_STACKFRAME_BEFORELROVERWRITE_SIZE=0x50 \
+		-DROPBUF=0x32927e80 \
+		-DROPKIT_LINEARMEM_REGIONBASE=0x30000000 \
+		-DROPKIT_LINEARMEM_BUF=ROPBUF+0x100000 \
+		"-DROPKIT_BINPAYLOAD_PATH=\"extdata:/payload.bin\""
+
+#The above ROPBUF addr is for TFH USA, probably has to be updated for others.
+
 all:
 	@mkdir -p finaloutput_boss
 	@mkdir -p build
@@ -41,5 +49,5 @@ build/$(TID)/$(BUILDPREFIX).bin:	build/$(TID)/$(BUILDPREFIX).elf
 	@$(OBJCOPY) -O binary $< $@
 
 build/$(TID)/$(BUILDPREFIX).elf:	../ctpkpwn.s
-	@$(CC) -x assembler-with-cpp -nostartfiles -nostdlib -I$(ROPKIT_PATH) -include $(ROPINC_PATH)/$(TID)/$(BUILDPREFIX) $< -o $@
+	@$(CC) -x assembler-with-cpp -nostartfiles -nostdlib -I$(ROPKIT_PATH) -include $(ROPINC_PATH)/$(TID)/$(BUILDPREFIX) $(DEFINES) $< -o $@
 

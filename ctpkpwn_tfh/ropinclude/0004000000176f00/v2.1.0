@@ -1,22 +1,21 @@
-#define ROP_POPPC 0x00113bbc
+#define ROP_POPPC 0x00103a60
 #define POP_R1PC 0x002ff5fc
-#define POP_R3PC 0x00111a50
+#define POP_R3PC 0x00104d3c
 #define POP_R2R6PC 0x00123d8c
-#define POP_R4LR_BXR1 0x00120dc0
+#define POP_R4LR_BXR1 0x001081d8
 #define POP_R4R8LR_BXR2 0x00120390
-#define POP_R4R5R6PC 0x0010e430
-#define POP_R4FPPC 0x0010d664
-#define POP_R4R8PC 0x0010d354
+#define POP_R4R5R6PC 0x00103914
+#define POP_R4FPPC 0x00104a34
+#define POP_R4R8PC 0x00104634
 
-#define ROP_STR_R1TOR0 0x00114be0
-#define ROP_STR_R0TOR1 0x001133e8
+#define ROP_STR_R1TOR0 0x0010bd48
+#define ROP_STR_R0TOR1 0x0010532c
 #define ROP_LDR_R0FROMR0 0x00125fe4
 #define ROP_ADDR0_TO_R1 0x001185b4
 
 #define MEMCPY 0x00113764
-//Failed to find the pattern.
 
-//Failed to find the pattern.
+#define svcControlMemory 0x00103db4
 #define svcSleepThread 0x00118430
 
 #define GSPGPU_FlushDataCache 0x001217fc
@@ -29,10 +28,12 @@
 #define ROP_LDRR1R1_STRR1R0 0x004b0420
 #define POP_R5R6PC 0x00477eb8
 #define ROP_CMPR0R1_ALT0 0x00505720
+#define MEMSET32_OTHER 0x002ffb3c
 //WARNING: ROP_INITOBJARRAY not found.
 #define svcCreateThread 0x0010728c
+#define svcConnectToPort 0x0010a65c
 #define svcGetProcessId 0x0010e31c
-//WARNING: SRV_GETSERVICEHANDLE not found.
+#define SRV_GETSERVICEHANDLE 0x0010b94c
 #define CFGIPC_SecureInfoGetRegion 0x003d3e14
 #define ROP_COND_THROWFATALERR 0x0010af80
 #define GXLOW_CMD4 0x00121900
@@ -42,3 +43,5 @@
 #define IFile_Open 0x003cb71c
 #define IFile_Close 0x003cba8c
 #define IFile_Seek 0x003ccc4c
+
+#define STACKPIVOT_ADR 0x00100848

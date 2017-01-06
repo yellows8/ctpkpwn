@@ -4,17 +4,7 @@
 
 _start:
 
-#define ROPBUF 0x32927e80 //For TFH USA, probably has to be updated for others.
-
-#define MEMSET32_OTHER 0x90909090
-
-#define STACKPIVOT_ADR 0x100848 //ldmdb r6!, {r0, r1, r2, r3, r4, r5, r6, r7, r8, ip, sp, lr, pc} (For TFH USA)
-
-#define ROPKIT_LINEARMEM_REGIONBASE 0x30000000
-
-#define ROPKIT_LINEARMEM_BUF (ROPBUF+0x100000)
-
-#define TARGET_STACKFRAME_BEFORELROVERWRITE_SIZE 0x50 //Byte-size needed to overwrite data on the stack right before saved LR.
+//Define TARGET_STACKFRAME_BEFORELROVERWRITE_SIZE: Byte-size needed to overwrite data on the stack right before saved LR.
 
 #include "ropkit_ropinclude.s"
 

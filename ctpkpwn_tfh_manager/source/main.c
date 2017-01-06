@@ -29,13 +29,15 @@ Result install_haxx()
 	ret = APT_GetProgramID(&cur_programID);
 	if(R_FAILED(ret))return ret;
 
-	//TODO: Load the version.
+	//TODO: Load the version instead of hard-coding it.
 	memset(tmpstr, 0, sizeof(tmpstr));
-	snprintf(tmpstr, sizeof(tmpstr)-1, "http://%s/boss/ctpkpwn/tfh/%016llx/v2.1.0.bin", "10.0.0.23"/*"yls8.mtheall.com"*/, (unsigned long long)cur_programID);
+	snprintf(tmpstr, sizeof(tmpstr)-1, "http://yls8.mtheall.com/boss/ctpkpwn/tfh/%016llx/v2.1.0.bin", (unsigned long long)cur_programID);
 	//HTTP is used here since it's currently unknown how to setup a non-default rootCA cert for BOSS.
 
-	ret = bossDeleteTask(taskID, 0);
-	ret = bossDeleteNsData(ctpkpwn_NsDataId);
+	printf("Running BOSS setup...\n");
+
+	bossDeleteTask(taskID, 0);
+	bossDeleteNsData(ctpkpwn_NsDataId);
 
 	bossSetupContextDefault(&ctx, 60, tmpstr);
 
@@ -97,6 +99,8 @@ Result install_haxx()
 			}
 
 			bossDeleteTask(taskID, 0);
+
+			if(R_SUCCEEDED(ret))printf("Done.\n");
 		}
 	}
 
