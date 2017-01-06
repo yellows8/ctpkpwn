@@ -24,9 +24,10 @@ DEFINES	:=	-DTARGET_STACKFRAME_BEFORELROVERWRITE_SIZE=0x50 \
 		-DROPBUF=0x32927e80 \
 		-DROPKIT_LINEARMEM_REGIONBASE=0x30000000 \
 		-DROPKIT_LINEARMEM_BUF=ROPBUF+0x100000 \
-		"-DROPKIT_BINPAYLOAD_PATH=\"extdata:/payload.bin\""
+		"-DROPKIT_BINPAYLOAD_PATH=\"extdata:/payload.bin\"" \
+		-DROPKIT_GSPTHREAD_OBJECTADDR=0x0072ac40
 
-#The above ROPBUF addr is for TFH USA, probably has to be updated for others.
+#The above ROPBUF addr is for TFH USA, probably has to be updated for others. Likewise for ROPKIT_GSPTHREAD_OBJECTADDR.
 
 all:
 	@mkdir -p finaloutput_boss
