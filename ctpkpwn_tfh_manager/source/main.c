@@ -11,7 +11,7 @@
 
 u32 ctpkpwn_NsDataId = 0x4e574b50;
 
-Result install_haxx()
+Result install_haxx(u64 cur_programID, FS_Archive extdata_arch, char *payload_path)
 {
 	Result ret=0;
 
@@ -20,21 +20,95 @@ Result install_haxx()
 	u32 tmp=0;
 	u8 tmpbuf[4] = {0};
 
-	char *taskID = "tmptask";
+	FILE *f = NULL;
+	int fd=0;
+	struct stat filestats;
+	Handle filehandle=0;
+	FS_Path payload_fspath = fsMakePath(PATH_ASCII, payload_path);
+	u8 *payload_buffer = NULL;
+	u32 payload_size = 0;
 
-	u64 cur_programID = 0;
+	char *taskID = "tmptask";
 
 	char tmpstr[256];
 
-	ret = APT_GetProgramID(&cur_programID);
-	if(R_FAILED(ret))return ret;
+	printf("Loading the payload from SD /otherapp.bin...\n");
+
+	f = fopen("sdmc:/otherapp.bin", "r");
+	if(f==NULL)
+	{
+		printf("Failed to open 'sdmc:/otherapp.bin': %d.\n", errno);
+		return errno;
+	}
+
+	fd = fileno(f);
+	if(fd==-1)
+	{
+		fclose(f);
+		return errno;
+	}
+
+	if(fstat(fd, &filestats)==-1)return errno;
+
+	payload_size = filestats.st_size;
+	if(payload_size > 0x100000)payload_size = 0x100000;
+
+	payload_buffer = malloc(payload_size);
+	if(payload_buffer==NULL)
+	{
+		return -7;
+	}
+	memset(payload_buffer, 0, payload_size);
+
+	tmp = fread(payload_buffer, 1, payload_size, f);
+
+	fclose(f);
+
+	if(tmp!=payload_size)
+	{
+		free(payload_buffer);
+		return -2;
+	}
+
+	if(R_SUCCEEDED(ret))
+	{
+		printf("Writing the payload to extdata...\n");
+
+		FSUSER_DeleteFile(extdata_arch, payload_fspath);
+
+		ret = FSUSER_CreateFile(extdata_arch, payload_fspath, 0, payload_size);
+		if(R_FAILED(ret))
+		{
+			printf("Failed to create the extdata payload file: 0x%08x.\n", (unsigned int)ret);
+			free(payload_buffer);
+			return ret;
+		}
+
+		ret = FSUSER_OpenFile(&filehandle, extdata_arch, payload_fspath, FS_OPEN_WRITE, 0);
+		if(R_FAILED(ret))
+		{
+			printf("Failed to open the extdata payload file: 0x%08x\n", (unsigned int)ret);
+			free(payload_buffer);
+			return ret;
+		}
+
+		ret = FSFILE_Write(filehandle, &tmp, 0, payload_buffer, payload_size, FS_WRITE_FLUSH);
+		free(payload_buffer);
+		if(R_FAILED(ret) || tmp!=payload_size)
+		{
+			printf("Failed to write the extdata payload file: res=0x%08x, transfer-size=0x%x.\n", (unsigned int)ret, (unsigned int)tmp);
+			if(ret==0 && tmp!=payload_size)ret = -2;
+		}
+
+		FSFILE_Close(filehandle);
+	}
+
+	printf("Running BOSS setup...\n");
 
 	//TODO: Load the version instead of hard-coding it.
 	memset(tmpstr, 0, sizeof(tmpstr));
 	snprintf(tmpstr, sizeof(tmpstr)-1, "http://yls8.mtheall.com/boss/ctpkpwn/tfh/%016llx/v2.1.0.bin", (unsigned long long)cur_programID);
 	//HTTP is used here since it's currently unknown how to setup a non-default rootCA cert for BOSS.
-
-	printf("Running BOSS setup...\n");
 
 	bossDeleteTask(taskID, 0);
 	bossDeleteNsData(ctpkpwn_NsDataId);
@@ -99,26 +173,29 @@ Result install_haxx()
 			}
 
 			bossDeleteTask(taskID, 0);
-
-			if(R_SUCCEEDED(ret))printf("Done.\n");
 		}
 	}
+
+	if(R_SUCCEEDED(ret))printf("Done.\n");
 
 	return ret;
 }
 
-Result delete_haxx()
+Result delete_haxx(FS_Archive extdata_arch, char *payload_path)
 {
 	//Result ret=0;
 	char *taskID = "tmptask";
 
-	printf("Deleting...\n");
+	printf("Deleting BOSS data...\n");
 
 	bossDeleteTask(taskID, 0);
-	//printf("bossDeleteTask returned 0x%08x.\n", (unsigned int)ret);
 
 	bossDeleteNsData(ctpkpwn_NsDataId);
 	//printf("bossDeleteNsData returned 0x%08x.\n", (unsigned int)ret);
+
+	printf("Deleting payload from extdata...\n");
+
+	FSUSER_DeleteFile(extdata_arch, fsMakePath(PATH_ASCII, payload_path));
 
 	printf("Done.\n");
 
@@ -129,6 +206,10 @@ int main(int argc, char **argv)
 {
 	int redraw = 1;
 	Result ret = 0;
+	u64 cur_programID=0;
+	FS_Archive extdata_arch;
+	FS_Path archpath;
+	FS_ExtSaveDataInfo extdatainfo;
 
 	// Initialize services
 	gfxInitDefault();
@@ -138,8 +219,36 @@ int main(int argc, char **argv)
 	printf("ctpkpwn_tfh_manager %s by yellows8.\n", VERSION);
 	printf("Manage ctpkpwn for TLoZ: Tri Force Heroes.\n");
 
-	ret = bossInit(0, true);
-	if(R_FAILED(ret))printf("bossInit() failed: 0x%08x.\n", (unsigned int)ret);
+	ret = APT_GetProgramID(&cur_programID);
+	if(R_FAILED(ret))printf("Failed to get the current programID: 0x%08x.\n", (unsigned int)ret);
+
+	if(R_SUCCEEDED(ret))
+	{
+		memset(&extdatainfo, 0, sizeof(extdatainfo));
+		extdatainfo.mediaType = MEDIATYPE_SD;
+		extdatainfo.saveId = (((u32)cur_programID) & 0x0fffff00) >> 8;
+
+		memset(&archpath, 0, sizeof(FS_Path));
+		archpath.type = PATH_BINARY;
+		archpath.size = 0xc;
+		archpath.data = &extdatainfo;
+	}
+
+	if(R_SUCCEEDED(ret))
+	{
+		ret = FSUSER_OpenArchive(&extdata_arch, ARCHIVE_EXTDATA, archpath);
+		if(R_FAILED(ret))printf("Failed to open the extdata: 0x%08x.\n", (unsigned int)ret);
+	}
+
+	if(R_SUCCEEDED(ret))
+	{
+		ret = bossInit(0, true);
+		if(R_FAILED(ret))
+		{
+			FSUSER_CloseArchive(extdata_arch);
+			printf("bossInit() failed: 0x%08x.\n", (unsigned int)ret);
+		}
+	}
 
 	if(ret==0)
 	{
@@ -161,23 +270,24 @@ int main(int argc, char **argv)
 			if (kDown & KEY_A)
 			{
 				consoleClear();
-				ret = install_haxx();
+				ret = install_haxx(cur_programID, extdata_arch, "/payload.bin");
 				redraw = 1;
 			}
 			else if (kDown & KEY_X)
 			{
 				consoleClear();
-				ret = delete_haxx();
+				ret = delete_haxx(extdata_arch, "/payload.bin");
 				redraw = 1;
 			}
 
 			if(ret!=0)break;
 		}
+
+		FSUSER_CloseArchive(extdata_arch);
+		bossExit();
 	}
 
-	bossExit();
-
-	if(ret!=0)printf("An error occured. If this is an actual issue not related to user failure, please report this to here if it persists(or comment on an already existing issue if needed), with a screenshot: https://github.com/yellows8/ctpkpwn/issues\n");
+	if(ret!=0)printf("An error occured(0x%08x). If this is an actual issue not related to user failure, please report this to here if it persists(or comment on an already existing issue if needed), with a screenshot: https://github.com/yellows8/ctpkpwn/issues\n", (unsigned int)ret);
 
 	printf("Press the START button to exit.\n");
 	// Main loop
