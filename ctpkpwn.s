@@ -37,13 +37,13 @@ ROPMACRO_STACKPIVOT_PREPAREREGS_BEFOREJUMP
 ROPMACRO_STACKPIVOT_JUMP
 
 ropstackstart:
-#ifdef THREADTERMINATEFLAG0
+/*#ifdef THREADTERMINATEFLAG0
 @ Set the flag for terminating a thread.
 ROPMACRO_WRITEWORD THREADTERMINATEFLAG0, 0x1
 
 @ Wait 10s.
 CALLFUNC_R0R1 svcSleepThread, 0x540BE400, 0x2
-#endif
+#endif*/
 
 #include "ropkit_boototherapp.s"
 
