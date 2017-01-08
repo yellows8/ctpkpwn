@@ -8,6 +8,10 @@ _start:
 
 #include "ropkit_ropinclude.s"
 
+#ifndef STACKPIVOT_ADR
+#define STACKPIVOT_ADR 0xa0a0a0a0//Tmp value until stackpivot for non-USA is supported.
+#endif
+
 .macro ROPMACRO_STACKPIVOT_PREPAREREGS_BEFOREJUMP
 .word POP_R5R6PC
 .word 0 @ r5

@@ -1,5 +1,5 @@
 #define ROP_POPPC 0x00113bbc
-#define POP_R1PC 0x002ff5fc
+#define POP_R1PC 0x002ff8b4
 #define POP_R3PC 0x00111a50
 #define POP_R2R6PC 0x00123d8c
 #define POP_R4LR_BXR1 0x00120dc0
@@ -18,30 +18,30 @@
 #define svcSleepThread 0x00118430
 
 #define GSPGPU_FlushDataCache 0x001217fc
-#define GSPGPU_SERVHANDLEADR 0x007451ac
+#define GSPGPU_SERVHANDLEADR 0x007451b4
 
-#define IFile_Read 0x003ccbc4
-#define IFile_Write 0x003cccfc
+#define IFile_Read 0x003ccf6c
+#define IFile_Write 0x003cd0a4
 
 #define POP_R0PC 0x00137af0
-#define ROP_LDRR1R1_STRR1R0 0x004b0420
-#define POP_R5R6PC 0x00477eb8
-#define ROP_CMPR0R1_ALT0 0x00505720
-#define MEMSET32_OTHER 0x002ffb3c
+#define ROP_LDRR1R1_STRR1R0 0x004b07c8
+#define POP_R5R6PC 0x00478260
+#define ROP_CMPR0R1_ALT0 0x00505ac8
+#define MEMSET32_OTHER 0x002ff9b0
 //WARNING: svcControlMemory not found.
 //WARNING: ROP_INITOBJARRAY not found.
 #define svcCreateThread 0x0010728c
 #define svcGetProcessId 0x0010e31c
 //WARNING: SRV_GETSERVICEHANDLE not found.
-#define CFGIPC_SecureInfoGetRegion 0x003d3e14
+#define CFGIPC_SecureInfoGetRegion 0x003d41bc
 #define ROP_COND_THROWFATALERR 0x0010af80
 #define GXLOW_CMD4 0x00121900
-#define GSP_SHAREDMEM_SETUPFRAMEBUF 0x004d7ed8
+#define GSP_SHAREDMEM_SETUPFRAMEBUF 0x004d8280
 #define GSPTHREAD_OBJECTADDR 0x0072ac40
 //WARNING: FS_MountSdmc not found.
-#define FS_MountSavedata 0x003ca850
-#define IFile_Open 0x003cb71c
-#define IFile_Close 0x003cba8c
-#define IFile_Seek 0x003ccc4c
+#define FS_MountSavedata 0x003cabf8
+#define IFile_Open 0x003cbac4
+#define IFile_Close 0x003cbe34
+#define IFile_Seek 0x003ccff4
 
-#define STACKPIVOT_ADR 0x00100848
+//ERROR: STACKPIVOT_ADR not found.
