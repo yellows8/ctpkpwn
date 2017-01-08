@@ -10,6 +10,8 @@ This automatically triggers during the initial "Loading..." screen, ~5s after th
 
 This is installed using custom [SpotPass](https://www.3dbrew.org/wiki/SpotPass) content. The SpotPass task is automatically deleted afterwards, leaving just the downloaded content(and \*hax payload). The content and *hax payload are both stored in the SD extdata(the former is only stored as BOSS content, it is never moved elsewhere by the game). The exploit can only be used on the same system it was installed on, since this is extdata. The normal savedata is not affected at all.
 
+This can *only* be installed with a network-connection since this uses SpotPass.
+
 The manager app loads the \*hax payload from SD "/otherapp.bin" during installation, the user must [setup](https://smealum.github.io/3ds/#otherapp) this before using the app.
 
 Your system has to allow unsigned SpotPass(BOSS-container) content in order for this to be installed. This can be done with ctr-httpwn >=v1.2(with the included bosshaxx on supported system-versions), or "CFW". ctr-httpwn would have to be run before running this manager app for installation.
