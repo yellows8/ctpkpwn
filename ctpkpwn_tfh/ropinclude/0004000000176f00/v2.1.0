@@ -44,4 +44,4 @@
 #define IFile_Close 0x003cba8c
 #define IFile_Seek 0x003ccc4c
 
-#define STACKPIVOT_ADR 0x00100848
+#define STACKPIVOT_ADR0 0x00100848

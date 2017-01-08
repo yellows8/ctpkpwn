@@ -44,4 +44,4 @@
 #define IFile_Close 0x003cbe34
 #define IFile_Seek 0x003ccff4
 
-//ERROR: STACKPIVOT_ADR not found.
+#define STACKPIVOT_ADR1 0x00301440

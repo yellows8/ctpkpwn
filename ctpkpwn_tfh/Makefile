@@ -21,7 +21,6 @@ ROPINC_PATH	:=	ropinclude
 export BOSSTOOLPARAMS	:=	$(BOSSTOOLPARAMS)
 
 DEFINES	:=	-DTARGET_STACKFRAME_BEFORELROVERWRITE_SIZE=0x50 \
-		-DROPBUF=0x32927e80 \
 		-DROPKIT_LINEARMEM_REGIONBASE=0x30000000 \
 		-DROPKIT_LINEARMEM_BUF=ROPBUF+0x100000 \
 		"-DROPKIT_BINPAYLOAD_PATH=\"extdata:/payload.bin\"" \
@@ -30,7 +29,22 @@ DEFINES	:=	-DTARGET_STACKFRAME_BEFORELROVERWRITE_SIZE=0x50 \
 		-DROPKIT_BEFOREJUMP_CACHEBUFSIZE=0x800000 \
 		-DROPKIT_OTHERAPP_NEWSP_ADDR=0x0FFC4000
 
-#The above ROPBUF addr is for TFH USA, probably has to be updated for others.
+# JPN
+ifeq ($(TID),0004000000176e00)
+ROPBUF	:=	0x3298a700
+endif
+
+# USA
+ifeq ($(TID),0004000000176f00)
+ROPBUF	:=	0x32927e80
+endif
+
+# EUR (tmp)
+ifeq ($(TID),0004000000177000)
+ROPBUF	:=	0x32927e80
+endif
+
+DEFINES	:=	$(DEFINES) -DROPBUF=$(ROPBUF)
 
 all:
 	@mkdir -p finaloutput_boss
@@ -53,5 +67,5 @@ build/$(TID)/$(BUILDPREFIX).bin:	build/$(TID)/$(BUILDPREFIX).elf
 	@$(OBJCOPY) -O binary $< $@
 
 build/$(TID)/$(BUILDPREFIX).elf:	../ctpkpwn.s
-	@$(CC) -x assembler-with-cpp -nostartfiles -nostdlib -I$(ROPKIT_PATH) -include $(ROPINC_PATH)/$(TID)/$(BUILDPREFIX) $(DEFINES) $< -o $@
+	$(CC) -x assembler-with-cpp -nostartfiles -nostdlib -I$(ROPKIT_PATH) -include $(ROPINC_PATH)/$(TID)/$(BUILDPREFIX) $(DEFINES) $< -o $@
 
