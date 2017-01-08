@@ -30,7 +30,7 @@ DEFINES	:=	-DTARGET_STACKFRAME_BEFORELROVERWRITE_SIZE=0x50 \
 		-DROPKIT_BEFOREJUMP_CACHEBUFSIZE=0x800000 \
 		-DROPKIT_OTHERAPP_NEWSP_ADDR=0x0FFC4000
 
-#The above ROPBUF addr is for TFH USA, probably has to be updated for others. Likewise for ROPKIT_GSPTHREAD_OBJECTADDR.
+#The above ROPBUF addr is for TFH USA, probably has to be updated for others.
 
 all:
 	@mkdir -p finaloutput_boss
