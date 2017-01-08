@@ -6,6 +6,8 @@ Currently the only inplementation of this is for "The Legend of Zelda: Tri Force
 
 For vuln details, see [here](https://www.3dbrew.org/wiki/3DS_Userland_Flaws#Non-system_applications).
 
+This automatically triggers during the initial "Loading..." screen, ~5s after the screen turns black @ 3ds-logo.
+
 This is installed using custom [SpotPass](https://www.3dbrew.org/wiki/SpotPass) content. The SpotPass task is automatically deleted afterwards, leaving just the downloaded content(and \*hax payload). The content and *hax payload are both stored in the SD extdata(the former is only stored as BOSS content, it is never moved elsewhere by the game). The exploit can only be used on the same system it was installed on, since this is extdata. The normal savedata is not affected at all.
 
 The manager app loads the \*hax payload from SD "/otherapp.bin" during installation, the user must [setup](https://smealum.github.io/3ds/#otherapp) this before using the app.
