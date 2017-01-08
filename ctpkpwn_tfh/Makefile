@@ -67,5 +67,5 @@ build/$(TID)/$(BUILDPREFIX).bin:	build/$(TID)/$(BUILDPREFIX).elf
 	@$(OBJCOPY) -O binary $< $@
 
 build/$(TID)/$(BUILDPREFIX).elf:	../ctpkpwn.s
-	$(CC) -x assembler-with-cpp -nostartfiles -nostdlib -I$(ROPKIT_PATH) -include $(ROPINC_PATH)/$(TID)/$(BUILDPREFIX) $(DEFINES) $< -o $@
+	@$(CC) -x assembler-with-cpp -nostartfiles -nostdlib -I$(ROPKIT_PATH) -include $(ROPINC_PATH)/$(TID)/$(BUILDPREFIX) $(DEFINES) $< -o $@
 
