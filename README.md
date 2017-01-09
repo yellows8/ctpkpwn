@@ -22,8 +22,9 @@ Only update-title v2.1.0 is supported. Regular-application titles(if any) which 
 Supported regions:
 * JPN
 * USA
-* EUR (Should just need ROPBUF updated)
+* EUR
 
 ## Credits
-* Myria: locating the ROPBUF addr for JPN + JPN testing.
+* profi200: Initial help with EUR support.
+* Myria: locating the ROPBUF addr for JPN + JPN testing. EUR/etc testing. Locating the ROPBUF addr for EUR.
 
