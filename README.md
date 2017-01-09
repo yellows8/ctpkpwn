@@ -16,6 +16,8 @@ The manager app loads the \*hax payload from SD "/otherapp.bin" during installat
 
 Your system has to allow unsigned SpotPass(BOSS-container) content in order for this to be installed. This can be done with ctr-httpwn >=v1.2(with the included bosshaxx on supported system-versions), or "CFW". ctr-httpwn would have to be run before running this manager app for installation.
 
+The game must have been run at least once, and have SpotPass enabled via the game option for it, before running the manager app.
+
 ## Supported regions/versions
 Only update-title v2.1.0 is supported. Regular-application titles(if any) which include {update-version} without a seperate update-title are not supported.
 

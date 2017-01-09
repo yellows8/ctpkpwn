@@ -217,7 +217,7 @@ int main(int argc, char **argv)
 	consoleInit(GFX_TOP, NULL);
 
 	printf("ctpkpwn_tfh_manager %s by yellows8.\n", VERSION);
-	printf("Manage ctpkpwn for TLoZ: Tri Force Heroes.\n");
+	printf("Manage ctpkpwn_tfh for TLoZ: Tri Force Heroes.\n");
 
 	ret = APT_GetProgramID(&cur_programID);
 	if(R_FAILED(ret))printf("Failed to get the current programID: 0x%08x.\n", (unsigned int)ret);

@@ -37,7 +37,7 @@ INCLUDES	:=	include
 VERSION	:=	v1.0
 
 APP_TITLE	:=	ctpkpwn_tfh_manager $(VERSION)
-APP_DESCRIPTION	:=	Manage ctpkpwn for TLoZ: Tri Force Heroes.              https://github.com/yellows8/ctpkpwn
+APP_DESCRIPTION	:=	Manage ctpkpwn_tfh for TLoZ: Tri Force Heroes.          https://github.com/yellows8/ctpkpwn
 APP_AUTHOR	:=	yellows8
 
 #---------------------------------------------------------------------------------
