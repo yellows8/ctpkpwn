@@ -18,6 +18,8 @@ Your system has to allow unsigned SpotPass(BOSS-container) content in order for 
 
 The game must have been run at least once, and have SpotPass enabled via the game option for it, before running the manager app.
 
+The manager app should be run from >= \*hax payload v2.8, however if you're not installing with an eShop version of the game this shouldn't matter.
+
 ## Supported regions/versions
 Only update-title v2.1.0 is supported. Regular-application titles(if any) which include {update-version} without a seperate update-title are not supported.
 
